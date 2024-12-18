@@ -1,0 +1,118 @@
+body {
+  font-family: Poppins, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 5px;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* Vänster sektion 3 delar, höger sektion 1 del */
+  gap: 10px;
+  align-items: stretch; /* Gör alla element lika höga */
+  justify-content: space-between; /* Mellanrum mellan kort och boxar */
+  gap: 20px;
+}
+
+.left-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-sidebar {
+    display: flex;
+    flex-wrap: wrap; /* Tillåt korten att radbrytas */
+  }
+.right-sidebar {
+    flex: 1; /* Tar mindre plats */
+    display: flex;
+    flex-direction: column; /* Placera boxarna vertikalt */
+    gap: 20px;
+  }
+
+.user-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 10px; /* Minskad padding */
+  margin: 10px; /* Justera marginalerna */
+  height: auto; /* Se till att höjden anpassas */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-card h3,
+.user-card p {
+  margin: 5px 0; /* Dra ihop rubriker och text */
+}
+
+.user-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px; /* Justera knappstorleken */
+  margin: 3px; /* Minska avståndet mellan knappar */
+  font-size: 0.9em; /* Mindre textstorlek för knappar */
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-box {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.sidebar-box h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.sidebar-box p {
+  margin: 5px 0;
+  font-size: 1em;
+}

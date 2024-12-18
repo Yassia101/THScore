@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoreboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Mål & Statistik</h1>
+    <div class="main-layout">
+      <!-- Vänster sektion: Användarkort -->
+      <div class="left-section">
+      
+        <div id="user-cards" class="user-cards"></div>
+      </div>
+
+      <!-- Höger sektion: Boxar -->
+      <div class="right-sidebar">
+        <div class="sidebar-box">
+          <h3>Mål</h3>
+          <p>Sälj: <span id="goal-sales">0</span></p>
+          <p>Tips: <span id="goal-switches">0</span></p>
+        </div>
+        <div class="sidebar-box">
+          <h3>Topp 3</h3>
+          <div>
+            <h4>Topp 3 Sälj</h4>
+            <div id="top-sales"></div>
+            <h4>Topp 3 Växlingar</h4>
+            <div id="top-switches"></div>
+          </div>
+        </div>
+        <div class="sidebar-box">
+          <h3>Dagens raket</h3>
+          <p id="daily-rocket">Ingen</p>
+        </div>
+        <div class="sidebar-box">
+          <h3>Veckans raket</h3>
+          <p id="weekly-rocket">Ingen</p>
+        </div>
+        <div class="sidebar-box">
+          <h3>Föregående veckas raket</h3>
+          <p id="prev-week-rocket">Ingen</p>
+        </div>
+        <div class="sidebar-box">
+          <h3>Månadens säljare</h3>
+          <p id="monthly-seller">Ingen</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="app.js"></script>
+</body>
+</html>
