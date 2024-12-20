@@ -13,8 +13,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-const database = getDatabase(firebaseApp);
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 const app = {
   data: {
