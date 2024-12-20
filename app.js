@@ -325,6 +325,9 @@ const app = {
       document.body.appendChild(resetButton);
     }
 
+     // Lägg till navigationsknapp till Scoreboard
+  this.addNavigationToIndex();
+    
     // Generera rapport
     this.generateReport();
   },
