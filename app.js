@@ -1,4 +1,4 @@
-const app = {
+ const app = {
   data: {
     totalSalesGoal: 4300,
     totalSwitchGoal: 1600,
