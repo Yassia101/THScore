@@ -305,34 +305,58 @@ const app = {
   },
 
   // Uppdatera admin UI
-  updateAdminUI() {
-    const adminUsers = document.getElementById("admin-users");
-    if (adminUsers) {
-      adminUsers.innerHTML = this.data.users
-        .map(name => `
-          <div class="admin-user">
-            <span>${name}</span>
-            <button onclick="app.removeUser('${name}')">Ta bort</button>
-          </div>
-        `)
-        .join("");
+ updateAdminUI() {
+  const adminUsers = document.getElementById("admin-users");
+  if (adminUsers) {
+    adminUsers.innerHTML = this.data.users
+      .map(name => `
+        <div class="admin-user">
+          <span>${name}</span>
+          <button onclick="app.removeUser('${name}')">Ta bort</button>
+        </div>
+      `)
+      .join("");
+  }
+
+  // Lägg till nollställningsknapp om den inte redan finns
+  if (!document.getElementById("reset-btn")) {
+    const resetButton = document.createElement("button");
+    resetButton.id = "reset-btn";
+    resetButton.textContent = "Nollställ alla siffror";
+    resetButton.onclick = () => app.resetData();
+    document.body.appendChild(resetButton);
+  }
+
+  // Lägg till funktionalitet för "Lägg till Användare"-knappen
+  document.getElementById("add-user-btn").onclick = () => {
+    const name = document.getElementById("new-user").value.trim();
+    const avatarFile = document.getElementById("avatar-upload").files[0];
+
+    if (!name) {
+      alert("Du måste ange ett namn!");
+      return;
     }
 
-    // Lägg till nollställningsknapp
-    if (!document.getElementById("reset-btn")) {
-      const resetButton = document.createElement("button");
-      resetButton.id = "reset-btn";
-      resetButton.textContent = "Nollställ alla siffror";
-      resetButton.onclick = () => app.resetData();
-      document.body.appendChild(resetButton);
+    if (avatarFile) {
+      this.compressImage(avatarFile, (compressedAvatar) => {
+        this.addUser(name, compressedAvatar);
+        alert(`Användaren "${name}" har lagts till med en bild!`);
+        document.getElementById("new-user").value = ""; // Töm formuläret
+        document.getElementById("avatar-upload").value = ""; // Töm filfältet
+      });
+    } else {
+      this.addUser(name, "default-avatar.png");
+      alert(`Användaren "${name}" har lagts till utan bild!`);
+      document.getElementById("new-user").value = ""; // Töm formuläret
     }
+  };
 
-    // Generera rapport
-    this.generateReport();
+  // Generera försäljningsrapport
+  this.generateReport();
 
-    // Lägg till navigationsknapp till Scoreboard
-    this.addNavigationToIndex();
-  },
+  // Lägg till navigeringsknapp till Scoreboard om den inte redan finns
+  this.addNavigationToIndex();
+}
 
   addNavigationToIndex() {
     if (!document.getElementById("index-link")) {
