@@ -267,68 +267,26 @@ const app = {
   },
 
   // Uppdatera admin UI
-updateAdminUI() {
-  const adminUsers = document.getElementById("admin-users");
-  if (adminUsers) {
-    adminUsers.innerHTML = this.data.users
-      .map(name => `
-        <div class="admin-user">
-          <span>${name}</span>
-          <button onclick="app.removeUser('${name}')">Ta bort</button>
-        </div>
-      `)
-      .join("");
-  }
-
-  // Lägg till nollställningsknapp
-  if (!document.getElementById("reset-btn")) {
-    const resetButton = document.createElement("button");
-    resetButton.id = "reset-btn";
-    resetButton.textContent = "Nollställ alla siffror";
-    resetButton.onclick = () => app.resetData();
-    document.body.appendChild(resetButton);
-  }
-
-  // Generera rapport
-  this.generateReport();
-},
-
-
-	generateReport() {
-  const reportSection = document.getElementById("sales-report");
-  if (reportSection) {
-    reportSection.innerHTML = ""; // Töm befintlig rapport
-
-    if (this.data.history.length === 0) {
-      reportSection.innerHTML = "<p>Ingen försäljningshistorik ännu.</p>";
-      return;
+  updateAdminUI() {
+    const adminUsers = document.getElementById("admin-users");
+    if (adminUsers) {
+      adminUsers.innerHTML = this.data.users
+        .map(name => `
+          <div class="admin-user">
+            <span>${name}</span>
+            <button onclick="app.removeUser('${name}')">Ta bort</button>
+          </div>
+        `).join("");
     }
 
-    const reportTable = document.createElement("table");
-    reportTable.innerHTML = `
-      <thead>
-        <tr>
-          <th>Namn</th>
-          <th>Typ av försäljning</th>
-          <th>Tidpunkt</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${this.data.history
-          .map(entry => `
-            <tr>
-              <td>${entry.name}</td>
-              <td>${entry.type}</td>
-              <td>${new Date(entry.timestamp).toLocaleString()}</td>
-            </tr>
-          `)
-          .join("")}
-      </tbody>
-    `;
-    reportSection.appendChild(reportTable);
-  }
-},
-
+    // Lägg till nollställningsknapp
+    if (!document.getElementById("reset-btn")) {
+      const resetButton = document.createElement("button");
+      resetButton.id = "reset-btn";
+      resetButton.textContent = "Nollställ alla siffror";
+      resetButton.onclick = () => app.resetData();
+      document.body.appendChild(resetButton);
+    }
 
     document.getElementById("add-user-btn").onclick = () => {
       const name = document.getElementById("new-user").value.trim();
@@ -377,4 +335,3 @@ updateAdminUI() {
 };
 
 window.onload = () => app.render();
-
