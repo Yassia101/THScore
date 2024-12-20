@@ -7,21 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Admin Panel</h1>
+  <div id="admin-container">
+  <div id="admin-users-container">
+    <h2>Användarhantering</h2>
     <div class="admin-form">
       <input type="text" id="new-user" placeholder="Användarnamn">
       <input type="file" id="avatar-upload" accept="image/*">
       <button id="add-user-btn">Lägg till Användare</button>
     </div>
     <div id="admin-users" class="admin-users"></div>
-
-    <div id="sales-report">
-  <h3>Försäljningsrapport</h3>
-  <!-- Rapporten genereras dynamiskt här -->
-</div>
-
   </div>
+  <div id="sales-report-container">
+    <h2>Försäljningshistorik</h2>
+    <div id="sales-report"></div>
+  </div>
+</div>
+  
   <script src="app.js"></script>
 
  
