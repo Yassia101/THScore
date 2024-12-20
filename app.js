@@ -339,7 +339,7 @@ const app = {
     }
   },
 
-    this.addNavigationToIndex();
+  this.addNavigationToIndex();
   },
   addNavigationButton() {
     if (!document.getElementById("admin-link")) {
