@@ -1,4 +1,4 @@
-import { app, analytics } from './firebase_config.js';
+import { app, analytics } from './firebase.js';
 
 const app = {
   data: {
