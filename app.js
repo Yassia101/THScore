@@ -1,3 +1,21 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, get, child } from "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyANbiHJdcuH4BHWuEqeRPUReuqAcEd7r0k",
+  authDomain: "scoreth-44880.firebaseapp.com",
+  projectId: "scoreth-44880",
+  storageBucket: "scoreth-44880.firebasestorage.app",
+  messagingSenderId: "421013194625",
+  appId: "1:421013194625:web:92ac8c56a598e0cc9fca80",
+  measurementId: "G-Y6NWZ33CMR"
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const database = getDatabase(firebaseApp);
+
 const app = {
   data: {
     totalSalesGoal: 4300,
@@ -139,12 +157,22 @@ const app = {
 
   // Spara och ladda data
   saveData() {
-    localStorage.setItem("scoreboardData", JSON.stringify(this.data));
+    set(ref(database, "scoreboardData"), this.data)
+      .then(() => console.log("Data saved to Firebase"))
+      .catch(error => console.error("Error saving data to Firebase:", error));
   },
 
   loadData() {
-    const savedData = JSON.parse(localStorage.getItem("scoreboardData"));
-    if (savedData) this.data = savedData;
+    get(child(ref(database), "scoreboardData"))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          this.data = snapshot.val();
+          this.render();
+        } else {
+          console.log("No data found in Firebase.");
+        }
+      })
+      .catch(error => console.error("Error loading data from Firebase:", error));
   },
 
   // Rendera huvud UI
