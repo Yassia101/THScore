@@ -138,13 +138,13 @@ button:hover {
   text-align: center;
 }
 
-#admin-container {
+.admin-container {
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
 
-#admin-users-container {
+.admin-users-container {
   flex: 1;
   background-color: #f9f9f9;
   padding: 20px;
@@ -152,7 +152,7 @@ button:hover {
   border-radius: 8px;
 }
 
-#sales-report-container {
+.sales-report-container {
   flex: 1;
   background-color: #f9f9f9;
   padding: 20px;
