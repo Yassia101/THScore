@@ -240,36 +240,41 @@ const app = {
   },
 
   // Generera rapport
-  generateReport() {
-    const reportSection = document.getElementById("sales-report");
-    if (reportSection) {
-      reportSection.innerHTML = ""; // Töm befintlig rapport
+generateReport() {
+  const reportSection = document.getElementById("sales-report");
+  if (reportSection) {
+    reportSection.innerHTML = ""; // Töm befintlig rapport
 
-      if (this.data.users.length === 0) {
-        reportSection.innerHTML = "<p>Inga användare att visa.</p>";
-        return;
-      }
-
-      this.data.users.forEach(user => {
-        const userSales = this.data.history.filter(entry => entry.name === user && entry.type !== "switches");
-        const totalSales = userSales.length;
-
-        const userDiv = document.createElement("div");
-        userDiv.className = "user-sales-report";
-        userDiv.innerHTML = `
-          <h3>${user}</h3>
-          <p>Totala försäljningar: ${totalSales}</p>
-          <ul>
-            ${userSales
-              .map(entry => `<li>${entry.type} - ${new Date(entry.timestamp).toLocaleString()}</li>`)
-              .join("")}
-          </ul>
-        `;
-
-        reportSection.appendChild(userDiv);
-      });
+    if (this.data.users.length === 0) {
+      reportSection.innerHTML = "<p>Inga användare att visa.</p>";
+      return;
     }
-  },
+
+    this.data.users.forEach(user => {
+      // Samla försäljningstyper och summera
+      const userSales = this.data.history.filter(entry => entry.name === user);
+      const salesSummary = userSales.reduce((summary, entry) => {
+        summary[entry.type] = (summary[entry.type] || 0) + 1;
+        return summary;
+      }, {});
+
+      // Generera användarens försäljningsrapport
+      const userDiv = document.createElement("div");
+      userDiv.className = "user-sales-report";
+      userDiv.innerHTML = `
+        <h3>${user}</h3>
+        <ul>
+          ${Object.entries(salesSummary)
+            .map(([type, count]) => `<li>${type}: ${count}</li>`)
+            .join("")}
+        </ul>
+      `;
+
+      reportSection.appendChild(userDiv);
+    });
+  }
+},
+
 
   // Nollställ alla siffror
   resetData() {
