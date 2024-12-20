@@ -339,6 +339,8 @@ const app = {
     }
   },
 
+    this.addNavigationToIndex();
+  },
   addNavigationButton() {
     if (!document.getElementById("admin-link")) {
       const button = document.createElement("button");
