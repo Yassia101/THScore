@@ -78,7 +78,7 @@ const app = {
   incrementSwitches(name) {
     this.data.switches[name]++;
     this.data.totalSwitchGoal--;
-    this.logHistory(name, "switches");
+    this.logHistory(name, "Växling");
     this.saveData();
     this.updateMainUI();
   },
