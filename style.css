@@ -137,3 +137,28 @@ button:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Skugga för att ge en popup-effekt */
   text-align: center;
 }
+
+#admin-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#admin-users-container {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+#sales-report-container {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
