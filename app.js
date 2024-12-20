@@ -329,8 +329,6 @@ const app = {
     this.generateReport();
   },
 
-   this.addNavigationToIndex();
-},
 
   addNavigationToIndex() {
     if (!document.getElementById("index-link")) {
