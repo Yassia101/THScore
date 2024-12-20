@@ -1,4 +1,3 @@
-import { app, analytics } from './firebase_config.js';
 
   const app = {
   data: {
