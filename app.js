@@ -330,7 +330,7 @@ const app = {
   },
 
    this.addNavigationToIndex();
- },
+},
 
   addNavigationToIndex() {
     if (!document.getElementById("index-link")) {
