@@ -1,5 +1,3 @@
-import { app, analytics } from './firebase.js';
-
 const app = {
   data: {
     totalSalesGoal: 4300,
