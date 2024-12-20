@@ -251,7 +251,7 @@ const app = {
       }
 
       this.data.users.forEach(user => {
-        const userSales = this.data.history.filter(entry => entry.name === user);
+        const userSales = this.data.history.filter(entry => entry.name === user && entry.type !== "switches");
         const totalSales = userSales.length;
 
         const userDiv = document.createElement("div");
