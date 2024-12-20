@@ -170,6 +170,9 @@ const app = {
           this.render();
         } else {
           console.log("No data found in Firebase.");
+          this.data.totalSalesGoal = 4300;
+          this.data.totalSwitchGoal = 1600;
+          this.updateMainUI();
         }
       })
       .catch(error => console.error("Error loading data from Firebase:", error));
@@ -212,6 +215,7 @@ const app = {
     }
 
     this.updateSidebarUI();
+    this.addNavigationButton();
   },
 
   // Uppdatera sidebar UI
