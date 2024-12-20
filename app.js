@@ -329,6 +329,9 @@ const app = {
     this.generateReport();
   },
 
+   this.addNavigationToIndex();
+ },
+
   addNavigationToIndex() {
     if (!document.getElementById("index-link")) {
       const button = document.createElement("button");
@@ -339,8 +342,6 @@ const app = {
     }
   },
 
-  this.addNavigationToIndex();
-  },
   addNavigationButton() {
     if (!document.getElementById("admin-link")) {
       const button = document.createElement("button");
