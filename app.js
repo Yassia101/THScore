@@ -237,6 +237,42 @@ const app = {
     if (modal) document.body.removeChild(modal);
   },
 
+  // Generera rapport
+  generateReport() {
+    const reportSection = document.getElementById("sales-report");
+    if (reportSection) {
+      reportSection.innerHTML = ""; // Töm befintlig rapport
+
+      if (this.data.history.length === 0) {
+        reportSection.innerHTML = "<p>Ingen försäljningshistorik ännu.</p>";
+        return;
+      }
+
+      const reportTable = document.createElement("table");
+      reportTable.innerHTML = `
+        <thead>
+          <tr>
+            <th>Namn</th>
+            <th>Typ av försäljning</th>
+            <th>Tidpunkt</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${this.data.history
+            .map(entry => `
+              <tr>
+                <td>${entry.name}</td>
+                <td>${entry.type}</td>
+                <td>${new Date(entry.timestamp).toLocaleString()}</td>
+              </tr>
+            `)
+            .join("")}
+        </tbody>
+      `;
+      reportSection.appendChild(reportTable);
+    }
+  },
+
   // Nollställ alla siffror
   resetData() {
     if (confirm("Är du säker på att du vill nollställa alla siffror? Detta kan inte ångras.")) {
@@ -276,7 +312,8 @@ const app = {
             <span>${name}</span>
             <button onclick="app.removeUser('${name}')">Ta bort</button>
           </div>
-        `).join("");
+        `)
+        .join("");
     }
 
     // Lägg till nollställningsknapp
@@ -288,40 +325,19 @@ const app = {
       document.body.appendChild(resetButton);
     }
 
-    document.getElementById("add-user-btn").onclick = () => {
-      const name = document.getElementById("new-user").value.trim();
-      const avatarFile = document.getElementById("avatar-upload").files[0];
-
-	if (!name) {
-        alert("Du måste ange ett namn!");
-        return;
-      }
-
-      if (avatarFile) {
-        this.compressImage(avatarFile, (compressedAvatar) => {
-          app.addUser(name, compressedAvatar);
-          app.clearForm();
-          app.showFeedback(`Användaren "${name}" har lagts till med en bild!`);
-        });
-      } else {
-        app.addUser(name, "default-avatar.png");
-        app.clearForm();
-        app.showFeedback(`Användaren "${name}" har lagts till utan bild!`);
-      }
-    };
-
-    this.addNavigationToIndex();
+    // Generera rapport
+    this.generateReport();
   },
 
-      addNavigationToIndex() {
-      if (!document.getElementById("index-link")) {
-        const button = document.createElement("button");
-        button.id = "index-link";
-        button.textContent = "Gå till Scoreboard";
-        button.onclick = () => window.location.href = "index.html";
-        document.body.appendChild(button);
-      }
-    },
+  addNavigationToIndex() {
+    if (!document.getElementById("index-link")) {
+      const button = document.createElement("button");
+      button.id = "index-link";
+      button.textContent = "Gå till Scoreboard";
+      button.onclick = () => window.location.href = "index.html";
+      document.body.appendChild(button);
+    }
+  },
 
   addNavigationButton() {
     if (!document.getElementById("admin-link")) {
