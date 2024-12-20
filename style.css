@@ -138,27 +138,29 @@ button:hover {
   text-align: center;
 }
 
-.admin-container {
+#admin-container {
   display: flex;
-  justify-content: space-between;
   gap: 20px;
+  padding: 20px;
 }
 
-.admin-users-container {
+#admin-users-container,
+#sales-report-container {
   flex: 1;
   background-color: #f9f9f9;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
-}
-
-.sales-report-container {
-  flex: 1;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-height: 500px;
+  max-height: 600px;
   overflow-y: auto;
+}
+
+#sales-report-container {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.admin-form input {
+  margin-right: 10px;
 }
 
