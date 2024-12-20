@@ -245,33 +245,29 @@ const app = {
     if (reportSection) {
       reportSection.innerHTML = ""; // Töm befintlig rapport
 
-      if (this.data.history.length === 0) {
-        reportSection.innerHTML = "<p>Ingen försäljningshistorik ännu.</p>";
+      if (this.data.users.length === 0) {
+        reportSection.innerHTML = "<p>Inga användare att visa.</p>";
         return;
       }
 
-      const reportTable = document.createElement("table");
-      reportTable.innerHTML = `
-        <thead>
-          <tr>
-            <th>Namn</th>
-            <th>Typ av försäljning</th>
-            <th>Tidpunkt</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${this.data.history
-            .map(entry => `
-              <tr>
-                <td>${entry.name}</td>
-                <td>${entry.type}</td>
-                <td>${new Date(entry.timestamp).toLocaleString()}</td>
-              </tr>
-            `)
-            .join("")}
-        </tbody>
-      `;
-      reportSection.appendChild(reportTable);
+      this.data.users.forEach(user => {
+        const userSales = this.data.history.filter(entry => entry.name === user);
+        const totalSales = userSales.length;
+
+        const userDiv = document.createElement("div");
+        userDiv.className = "user-sales-report";
+        userDiv.innerHTML = `
+          <h3>${user}</h3>
+          <p>Totala försäljningar: ${totalSales}</p>
+          <ul>
+            ${userSales
+              .map(entry => `<li>${entry.type} - ${new Date(entry.timestamp).toLocaleString()}</li>`)
+              .join("")}
+          </ul>
+        `;
+
+        reportSection.appendChild(userDiv);
+      });
     }
   },
 
