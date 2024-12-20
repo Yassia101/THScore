@@ -267,26 +267,31 @@ const app = {
   },
 
   // Uppdatera admin UI
-  updateAdminUI() {
-    const adminUsers = document.getElementById("admin-users");
-    if (adminUsers) {
-      adminUsers.innerHTML = this.data.users
-        .map(name => `
-          <div class="admin-user">
-            <span>${name}</span>
-            <button onclick="app.removeUser('${name}')">Ta bort</button>
-          </div>
-        `).join("");
-    }
+updateAdminUI() {
+  const adminUsers = document.getElementById("admin-users");
+  if (adminUsers) {
+    adminUsers.innerHTML = this.data.users
+      .map(name => `
+        <div class="admin-user">
+          <span>${name}</span>
+          <button onclick="app.removeUser('${name}')">Ta bort</button>
+        </div>
+      `)
+      .join("");
+  }
 
-    // Lägg till nollställningsknapp
-    if (!document.getElementById("reset-btn")) {
-      const resetButton = document.createElement("button");
-      resetButton.id = "reset-btn";
-      resetButton.textContent = "Nollställ alla siffror";
-      resetButton.onclick = () => app.resetData();
-      document.body.appendChild(resetButton);
-    }
+  // Lägg till nollställningsknapp
+  if (!document.getElementById("reset-btn")) {
+    const resetButton = document.createElement("button");
+    resetButton.id = "reset-btn";
+    resetButton.textContent = "Nollställ alla siffror";
+    resetButton.onclick = () => app.resetData();
+    document.body.appendChild(resetButton);
+  }
+
+  // Generera rapport
+  this.generateReport();
+},
 
     document.getElementById("add-user-btn").onclick = () => {
       const name = document.getElementById("new-user").value.trim();
