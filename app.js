@@ -293,6 +293,43 @@ updateAdminUI() {
   this.generateReport();
 },
 
+
+	generateReport() {
+  const reportSection = document.getElementById("sales-report");
+  if (reportSection) {
+    reportSection.innerHTML = ""; // Töm befintlig rapport
+
+    if (this.data.history.length === 0) {
+      reportSection.innerHTML = "<p>Ingen försäljningshistorik ännu.</p>";
+      return;
+    }
+
+    const reportTable = document.createElement("table");
+    reportTable.innerHTML = `
+      <thead>
+        <tr>
+          <th>Namn</th>
+          <th>Typ av försäljning</th>
+          <th>Tidpunkt</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${this.data.history
+          .map(entry => `
+            <tr>
+              <td>${entry.name}</td>
+              <td>${entry.type}</td>
+              <td>${new Date(entry.timestamp).toLocaleString()}</td>
+            </tr>
+          `)
+          .join("")}
+      </tbody>
+    `;
+    reportSection.appendChild(reportTable);
+  }
+},
+
+
     document.getElementById("add-user-btn").onclick = () => {
       const name = document.getElementById("new-user").value.trim();
       const avatarFile = document.getElementById("avatar-upload").files[0];
