@@ -11,13 +11,14 @@ const app = {
 
   // Lägg till användare
   addUser(name, avatar) {
-    if (!this.data.users.includes(name)) { 
+    if (!this.data.users.includes(name)) {
       this.data.users.push(name);
       this.data.sales[name] = 0;
       this.data.switches[name] = 0;
       this.data.avatars[name] = avatar || "default-avatar.png";
       this.saveData();
       this.render();
+      alert(`Användaren '${name}' har lagts till!`);
     } else {
       alert("Användarnamnet finns redan. Välj ett annat namn.");
     }
@@ -33,6 +34,7 @@ const app = {
       delete this.data.avatars[name];
       this.saveData();
       this.render();
+      alert(`Användaren '${name}' har tagits bort!`);
     }
   },
 
@@ -44,14 +46,14 @@ const app = {
       img.onload = () => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const maxWidth = 800; // Max bredd för att minska storlek
+        const maxWidth = 800;
         const scaleSize = maxWidth / img.width;
 
         canvas.width = maxWidth;
         canvas.height = img.height * scaleSize;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        const compressedData = canvas.toDataURL("image/jpeg", 0.9); // Komprimera till 60% kvalitet
+        const compressedData = canvas.toDataURL("image/jpeg", 0.9);
         callback(compressedData);
       };
       img.src = event.target.result;
@@ -325,13 +327,12 @@ const app = {
       document.body.appendChild(resetButton);
     }
 
-     // Lägg till navigationsknapp till Scoreboard
-  this.addNavigationToIndex();
-    
     // Generera rapport
     this.generateReport();
-  },
 
+    // Lägg till navigationsknapp till Scoreboard
+    this.addNavigationToIndex();
+  },
 
   addNavigationToIndex() {
     if (!document.getElementById("index-link")) {
