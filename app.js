@@ -61,11 +61,7 @@ const app = {
 
   // Funktioner för att öka/minska poäng
   incrementSales(name) {
-    this.data.sales[name]++;
-    this.data.totalSalesGoal--;
-    this.logHistory(name, "sales");
-    this.saveData();
-    this.updateMainUI();
+    this.showSalesOptions(name);
   },
 
   decrementSales(name) {
@@ -210,6 +206,37 @@ const app = {
       .slice(0, count);
   },
 
+  // Visa val för sälj
+  showSalesOptions(name) {
+    const modal = document.createElement("div");
+    modal.className = "sales-modal";
+    modal.innerHTML = `
+      <div class="modal-content">
+        <h3>Välj typ av sälj</h3>
+        <button onclick="app.confirmSale('${name}', 'Kampanj')">Kampanj</button>
+        <button onclick="app.confirmSale('${name}', 'Mäklartips')">Mäklartips</button>
+        <button onclick="app.confirmSale('${name}', 'Säljtips')">Säljtips</button>
+        <button onclick="app.confirmSale('${name}', 'Formulär')">Formulär</button>
+        <button onclick="app.closeModal()">Avbryt</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  },
+
+  confirmSale(name, type) {
+    this.data.sales[name]++;
+    this.data.totalSalesGoal--;
+    this.logHistory(name, type);
+    this.saveData();
+    this.updateMainUI();
+    this.closeModal();
+  },
+
+  closeModal() {
+    const modal = document.querySelector(".sales-modal");
+    if (modal) document.body.removeChild(modal);
+  },
+
   // Nollställ alla siffror
   resetData() {
     if (confirm("Är du säker på att du vill nollställa alla siffror? Detta kan inte ångras.")) {
@@ -265,7 +292,7 @@ const app = {
       const name = document.getElementById("new-user").value.trim();
       const avatarFile = document.getElementById("avatar-upload").files[0];
 
-      if (!name) {
+	if (!name) {
         alert("Du måste ange ett namn!");
         return;
       }
@@ -308,3 +335,4 @@ const app = {
 };
 
 window.onload = () => app.render();
+
