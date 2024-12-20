@@ -240,40 +240,61 @@ const app = {
   },
 
   // Generera rapport
-  generateReport() {
+generateReport() {
     const reportSection = document.getElementById("sales-report");
     if (reportSection) {
-      reportSection.innerHTML = ""; // Töm befintlig rapport
+        reportSection.innerHTML = ""; // Töm befintlig rapport
 
-      if (this.data.history.length === 0) {
-        reportSection.innerHTML = "<p>Ingen försäljningshistorik ännu.</p>";
-        return;
-      }
+        if (this.data.history.length === 0) {
+            reportSection.innerHTML = "<p>Ingen försäljningshistorik ännu.</p>";
+            return;
+        }
 
-      const reportTable = document.createElement("table");
-      reportTable.innerHTML = `
-        <thead>
-          <tr>
-            <th>Namn</th>
-            <th>Typ av försäljning</th>
-            <th>Tidpunkt</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${this.data.history
-            .map(entry => `
-              <tr>
-                <td>${entry.name}</td>
-                <td>${entry.type}</td>
-                <td>${new Date(entry.timestamp).toLocaleString()}</td>
-              </tr>
-            `)
-            .join("")}
-        </tbody>
-      `;
-      reportSection.appendChild(reportTable);
+        // Skapa en container för varje användare
+        this.data.users.forEach(user => {
+            const userSection = document.createElement("div");
+            userSection.className = "user-report";
+
+            // Skapa rubrik för användaren
+            const userHeader = document.createElement("h3");
+            userHeader.textContent = `Användare: ${user}`;
+            userSection.appendChild(userHeader);
+
+            // Skapa tabell för försäljningar
+            const userTable = document.createElement("table");
+            userTable.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Typ av Försäljning</th>
+                        <th>Tidpunkt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${this.data.history
+                        .filter(entry => entry.name === user)
+                        .map(entry => `
+                            <tr>
+                                <td>${entry.type}</td>
+                                <td>${new Date(entry.timestamp).toLocaleString()}</td>
+                            </tr>
+                        `)
+                        .join("")}
+                </tbody>
+            `;
+
+            userSection.appendChild(userTable);
+
+            // Visa total försäljning för användaren
+            const userTotal = document.createElement("p");
+            userTotal.className = "user-total";
+            const totalSales = this.data.history.filter(entry => entry.name === user).length;
+            userTotal.textContent = `Total försäljning: ${totalSales}`;
+            userSection.appendChild(userTotal);
+
+            reportSection.appendChild(userSection);
+        });
     }
-  },
+}
 
   // Nollställ alla siffror
   resetData() {
