@@ -68,11 +68,37 @@ const app = {
 
   decrementSales(name) {
     if (this.data.sales[name] > 0) {
+      // Visa val för vad som ska tas bort
+      const modal = document.createElement("div");
+      modal.className = "sales-modal";
+      modal.innerHTML = `
+        <div class="modal-content">
+          <h3>Välj vad du vill ta bort</h3>
+          <button onclick="app.confirmRemoveSale('${name}', 'Kampanj')">Kampanj</button>
+          <button onclick="app.confirmRemoveSale('${name}', 'Mäklartips')">Mäklartips</button>
+          <button onclick="app.confirmRemoveSale('${name}', 'Säljtips')">Säljtips</button>
+          <button onclick="app.confirmRemoveSale('${name}', 'Formulär')">Formulär</button>
+          <button onclick="app.closeModal()">Avbryt</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+  },
+
+  confirmRemoveSale(name, type) {
+    const historyIndex = this.data.history.findIndex(
+      (entry) => entry.name === name && entry.type === type
+    );
+
+    if (historyIndex !== -1) {
+      this.data.history.splice(historyIndex, 1);
       this.data.sales[name]--;
       this.data.totalSalesGoal++;
       this.saveData();
       this.updateMainUI();
     }
+
+    this.closeModal();
   },
 
   incrementSwitches(name) {
@@ -83,18 +109,30 @@ const app = {
     this.updateMainUI();
   },
 
+  decrementSwitches(name) {
+    if (this.data.switches[name] > 0) {
+      // Ta bort från växlingshistorik
+      const historyIndex = this.data.history.findIndex(
+        (entry) => entry.name === name && entry.type === "Växling"
+      );
+      if (historyIndex !== -1) {
+        this.data.history.splice(historyIndex, 1);
+        this.data.switches[name]--;
+        this.data.totalSwitchGoal++;
+        this.saveData();
+        this.updateMainUI();
+      }
+    }
+  },
+
   logHistory(name, type) {
     const timestamp = new Date().toISOString();
     this.data.history.push({ name, type, timestamp });
   },
 
-  decrementSwitches(name) {
-    if (this.data.switches[name] > 0) {
-      this.data.switches[name]--;
-      this.data.totalSwitchGoal++;
-      this.saveData();
-      this.updateMainUI();
-    }
+  closeModal() {
+    const modal = document.querySelector(".sales-modal");
+    if (modal) document.body.removeChild(modal);
   },
 
   getRocket(period, type) {
@@ -131,8 +169,8 @@ const app = {
       counts[entry.name] = (counts[entry.name] || 0) + 1;
     });
 
-    const [topPerformer] = Object.entries(counts).sort(([, a], [, b]) => b - a);
-    return topPerformer ? `${topPerformer[0]}: ${topPerformer[1]}` : "Ingen";
+    const topPerformers = Object.entries(counts).sort(([, a], [, b]) => b - a);
+    return topPerformers.length > 0 ? `${topPerformers[0][0]}: ${topPerformers[0][1]}` : "Ingen";
   },
 
   // Spara och ladda data
@@ -234,13 +272,8 @@ const app = {
     this.closeModal();
   },
 
-  closeModal() {
-    const modal = document.querySelector(".sales-modal");
-    if (modal) document.body.removeChild(modal);
-  },
-
   // Generera rapport
-generateReport() {
+  generateReport() {
   const reportSection = document.getElementById("sales-report");
   if (reportSection) {
     reportSection.innerHTML = ""; // Töm befintlig rapport
@@ -251,28 +284,65 @@ generateReport() {
     }
 
     this.data.users.forEach(user => {
-      // Samla försäljningstyper och summera
-      const userSales = this.data.history.filter(entry => entry.name === user);
+      // Samla försäljningstyper och summera, exkludera "Växling"
+      const userSales = this.data.history.filter(entry => entry.name === user && entry.type !== "Växling");
       const salesSummary = userSales.reduce((summary, entry) => {
         summary[entry.type] = (summary[entry.type] || 0) + 1;
         return summary;
       }, {});
+
+      const totalSales = Object.values(salesSummary).reduce((a, b) => a + b, 0);
+
+      // Samla växlingar separat
+      const userSwitches = this.data.history.filter(entry => entry.name === user && entry.type === "Växling");
+      const switchesCount = userSwitches.length;
 
       // Generera användarens försäljningsrapport
       const userDiv = document.createElement("div");
       userDiv.className = "user-sales-report";
       userDiv.innerHTML = `
         <h3>${user}</h3>
+        <p>Total Försäljning: ${totalSales}</p>
         <ul>
           ${Object.entries(salesSummary)
             .map(([type, count]) => `<li>${type}: ${count}</li>`)
             .join("")}
         </ul>
+        <p>Totala Växlingar: ${switchesCount}</p>
       `;
 
       reportSection.appendChild(userDiv);
     });
   }
+},
+
+exportToExcel() {
+  // Samla data från försäljningshistoriken
+  const data = this.data.users.map(user => {
+    const userSales = this.data.history.filter(entry => entry.name === user && entry.type !== "Växling");
+    const salesSummary = userSales.reduce((summary, entry) => {
+      summary[entry.type] = (summary[entry.type] || 0) + 1;
+      return summary;
+    }, {});
+
+    const totalSales = Object.values(salesSummary).reduce((a, b) => a + b, 0);
+
+    return {
+      Användare: user,
+      TotalFörsäljning: totalSales,
+      ...salesSummary
+    };
+  });
+
+  // Skapa arbetsbok och ark
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(data);
+
+  // Lägg till ark i arbetsboken
+  XLSX.utils.book_append_sheet(wb, ws, "Försäljningshistorik");
+
+  // Ladda ner filen
+  XLSX.writeFile(wb, "försäljningshistorik.xlsx");
 },
 
 
@@ -357,6 +427,48 @@ generateReport() {
 
     // Lägg till navigeringsknapp till Scoreboard om den inte redan finns
     this.addNavigationToIndex();
+
+    // Lägg till export-knapp om den inte redan finns
+    if (!document.getElementById("export-btn")) {
+      const exportButton = document.createElement("button");
+      exportButton.id = "export-btn";
+      exportButton.textContent = "Exportera till Excel";
+      exportButton.onclick = () => app.exportToExcel();
+      document.body.appendChild(exportButton);
+    }
+  },
+
+  exportToExcel() {
+    // Samla data från försäljningshistoriken
+    const data = this.data.users.map(user => {
+      const userSales = this.data.history.filter(entry => entry.name === user && entry.type !== "Växling");
+      const userSwitches = this.data.history.filter(entry => entry.name === user && entry.type === "Växling");
+      
+      const salesSummary = userSales.reduce((summary, entry) => {
+        summary[entry.type] = (summary[entry.type] || 0) + 1;
+        return summary;
+      }, {});
+  
+      const totalSales = Object.values(salesSummary).reduce((a, b) => a + b, 0);
+      const totalSwitches = userSwitches.length;
+  
+      return {
+        Användare: user,
+        TotalFörsäljning: totalSales,
+        TotalaVäxlingar: totalSwitches,
+        ...salesSummary
+      };
+    });
+  
+    // Skapa arbetsbok och ark
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(data);
+  
+    // Lägg till ark i arbetsboken
+    XLSX.utils.book_append_sheet(wb, ws, "Försäljningshistorik");
+  
+    // Ladda ner filen
+    XLSX.writeFile(wb, "försäljningshistorik.xlsx");
   },
 
   addNavigationToIndex() {

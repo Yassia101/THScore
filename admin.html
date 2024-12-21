@@ -22,10 +22,34 @@
     <div id="sales-report"></div>
   </div>
 </div>
-  
-  <script src="app.js"></script>
 
- 
+<div id="filter-container">
+    <label for="month-filter">Välj månad:</label>
+    <select id="month-filter">
+      <option value="">Alla månader</option>
+      <option value="1">Januari</option>
+      <option value="2">Februari</option>
+      <option value="3">Mars</option>
+      <option value="4">April</option>
+      <option value="5">Maj</option>
+      <option value="6">Juni</option>
+      <option value="7">Juli</option>
+      <option value="8">Augusti</option>
+      <option value="9">September</option>
+      <option value="10">Oktober</option>
+      <option value="11">November</option>
+      <option value="12">December</option>
+    </select>
+  
+    <label for="year-filter">Välj år:</label>
+    <input type="number" id="year-filter" placeholder="År" min="2025" max="2025">
+  
+    <button id="apply-filter-btn">Tillämpa filter</button>
+  </div>
+  
+
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
